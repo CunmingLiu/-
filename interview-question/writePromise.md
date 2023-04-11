@@ -1,4 +1,4 @@
-### 手写一个 promise
+### 手写 promise
 
 ```javascript
 //Promise/A+规范的三种状态

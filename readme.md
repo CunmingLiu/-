@@ -9,6 +9,6 @@
 ## 常见面试题
 
 1. [手写 promise](./interview-question/writePromise.md)
-2. [手写一个迭代器](./interview-question//writeGenerator.md)
+2. [手写迭代器](./interview-question//writeGenerator.md)
 
 ## 数据结构和算法
