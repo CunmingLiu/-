@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            //Promise/A+规范的三种状态
+            const PENDING = "pending";
+            const FULFILLED = "fulfilled";
+            const REJECTED = "rejected";
+            //手动写一个promise
+            class MyPromise {
+                constructor(executor) {
+                    this._status = PENDING; // Promise状态
+                    this._resolveQueue = []; //成功队列，resolve时触发
+                    this._rejectQueue = []; //失败队列，reject时触发
+                    let _resolve = (val) => {
+                        if (this._status !== PENDING) return; //对应规范中的"状态只能由pending到fulfilled或rejected"
+                        this._status = FULFILLED;
+                        while (this._resolveQueue.length) {
+                            const callback = this._resolveQueue.shift();
+                            callback(val);
+                        }
+                    };
+                    //实现同resolve
+                    let _reject = (val) => {
+                        if (this._status !== PENDING) return;
+                        this._status = REJECTED;
+                        while (this._rejectQueue.length) {
+                            const callback = this._rejectQueue.shift();
+                            callback(val);
+                        }
+                    };
+                    executor(_resolve, _reject);
+                }
+                then(resolveFn, rejectFn) {
+                    this._resolveQueue.push(resolveFn);
+                    this._rejectQueue.push(rejectFn);
+                }
+            }
+            const p1 = new MyPromise((resolve, reject) => {
+                setTimeout(() => {
+                    //当调用了异步时，调用resolve
+                    resolve("result");
+                }, 1000);
+            });
+            p1.then((res) => console.log(res));
+        </script>
+    </body>
+</html>
